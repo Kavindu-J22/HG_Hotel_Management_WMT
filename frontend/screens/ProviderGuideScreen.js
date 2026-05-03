@@ -115,6 +115,9 @@ const ProviderGuideScreen = ({ navigation }) => {
                                 <Text style={styles.actionText}>Delete Profile</Text>
                             </TouchableOpacity>
                         </View>
+                        <TouchableOpacity style={[styles.actionButton, styles.editButton, { marginTop: 15, width: '100%' }]} onPress={() => navigation.navigate('ProviderTourPlans')}>
+                            <Text style={styles.actionText}>Manage Tour Plans</Text>
+                        </TouchableOpacity>
                     </View>
                 </ScrollView>
             )}

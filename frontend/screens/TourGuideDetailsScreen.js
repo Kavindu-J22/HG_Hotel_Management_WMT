@@ -3,17 +3,23 @@ import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, ActivityIn
 import api from '../services/api';
 import { LinearGradient } from 'expo-linear-gradient';
 import ReviewsSection from '../components/ReviewsSection';
+import WishlistButton from '../components/WishlistButton';
 
 const TourGuideDetailsScreen = ({ route, navigation }) => {
     const { guideId } = route.params;
     const [guide, setGuide] = useState(null);
+    const [plans, setPlans] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchGuideDetails = async () => {
+        const fetchDetails = async () => {
             try {
-                const res = await api.get(`/guides/${guideId}`);
-                setGuide(res.data.data);
+                const [guideRes, plansRes] = await Promise.all([
+                    api.get(`/guides/${guideId}`),
+                    api.get(`/guides/${guideId}/plans`)
+                ]);
+                setGuide(guideRes.data.data);
+                setPlans(plansRes.data.data);
             } catch (error) {
                 console.error('Error fetching guide details', error);
             } finally {
@@ -21,7 +27,7 @@ const TourGuideDetailsScreen = ({ route, navigation }) => {
             }
         };
 
-        fetchGuideDetails();
+        fetchDetails();
     }, [guideId]);
 
     if (loading) {
@@ -47,6 +53,7 @@ const TourGuideDetailsScreen = ({ route, navigation }) => {
                 <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
                     <Text style={styles.backButtonText}>←</Text>
                 </TouchableOpacity>
+                <WishlistButton itemType="TourGuide" itemId={guide._id} />
             </LinearGradient>
 
             {/* Content */}
@@ -102,29 +109,34 @@ const TourGuideDetailsScreen = ({ route, navigation }) => {
                 <Text style={styles.sectionTitle}>About Me</Text>
                 <Text style={styles.description}>{guide.bio}</Text>
 
+                {/* Tour Plans Section */}
+                <Text style={styles.sectionTitle}>My Tour Plans</Text>
+                {plans.length > 0 ? (
+                    plans.map(plan => (
+                        <TouchableOpacity 
+                            key={plan._id} 
+                            style={styles.planCard}
+                            onPress={() => navigation.navigate('TourPlanDetails', { planId: plan._id })}
+                        >
+                            {plan.images && plan.images.length > 0 && (
+                                <Image source={{ uri: plan.images[0] }} style={styles.planImage} />
+                            )}
+                            <View style={styles.planInfo}>
+                                <Text style={styles.planTitle}>{plan.title}</Text>
+                                <Text style={styles.planSpecs}>{plan.durationDays} Days | Pax: {plan.pax}</Text>
+                                <Text style={styles.planPrice}>${plan.price}</Text>
+                            </View>
+                        </TouchableOpacity>
+                    ))
+                ) : (
+                    <Text style={{ color: '#9E9EA7', fontStyle: 'italic', marginBottom: 20 }}>This guide has no active tour plans yet.</Text>
+                )}
+
                 {/* Reviews Section */}
                 <ReviewsSection itemId={guide._id} itemType="TourGuide" />
             </View>
             
-            <View style={{ height: 80 }} /> {/* Bottom padding */}
-
-            {/* Bottom Book Button */}
-            <View style={styles.bottomBar}>
-                <TouchableOpacity 
-                    style={styles.bookButton}
-                    onPress={() => navigation.navigate('Booking', {
-                        itemId: guide._id,
-                        itemType: 'TourGuide',
-                        itemTitle: `${guide.user?.name}'s Guided Tour`,
-                        pricePerDay: guide.dailyRate || 50
-                    })}
-                >
-                    <LinearGradient colors={['#43e97b', '#38f9d7']} style={styles.bookButtonGradient} start={{x:0, y:0}} end={{x:1, y:0}}>
-                        <Text style={styles.bookButtonText}>Book Guide</Text>
-                        <Text style={styles.bookButtonPrice}>${guide.dailyRate || 50} / day</Text>
-                    </LinearGradient>
-                </TouchableOpacity>
-            </View>
+            <View style={{ height: 40 }} /> {/* Bottom padding */}
         </ScrollView>
     );
 };
@@ -153,11 +165,12 @@ const styles = StyleSheet.create({
     languagePill: { backgroundColor: '#E8F5E9', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, marginRight: 10, marginBottom: 10 },
     languageText: { color: '#43e97b', fontWeight: 'bold', fontSize: 14 },
     description: { fontSize: 16, color: '#666', lineHeight: 24, marginBottom: 20 },
-    bottomBar: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20, backgroundColor: '#FFF', borderTopWidth: 1, borderColor: '#EEE' },
-    bookButton: { borderRadius: 16, overflow: 'hidden', elevation: 5, shadowColor: '#38f9d7', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 5 },
-    bookButtonGradient: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 24, paddingVertical: 16 },
-    bookButtonText: { color: '#FFF', fontSize: 18, fontWeight: 'bold' },
-    bookButtonPrice: { color: '#FFF', fontSize: 16, fontWeight: '600' }
+    planCard: { flexDirection: 'row', backgroundColor: '#F8F9FA', borderRadius: 12, overflow: 'hidden', marginBottom: 15, borderWidth: 1, borderColor: '#E9ECEF' },
+    planImage: { width: 100, height: '100%', resizeMode: 'cover' },
+    planInfo: { flex: 1, padding: 15 },
+    planTitle: { fontSize: 16, fontWeight: 'bold', color: '#2D3142', marginBottom: 4 },
+    planSpecs: { fontSize: 13, color: '#6C757D', marginBottom: 8 },
+    planPrice: { fontSize: 16, fontWeight: 'bold', color: '#43e97b' }
 });
 
 export default TourGuideDetailsScreen;

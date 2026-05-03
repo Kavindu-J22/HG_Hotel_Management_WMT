@@ -28,6 +28,7 @@ const tourGuideRoutes = require('./routes/tourGuideRoutes');
 const tourPlanRoutes = require('./routes/tourPlanRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const wishlistRoutes = require('./routes/wishlistRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/hotels', hotelRoutes);
@@ -38,6 +39,7 @@ app.use('/api/plans', tourPlanRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/items/:itemId/reviews', reviewRoutes);
+app.use('/api/wishlists', wishlistRoutes);
 
 // Define PORT
 const PORT = process.env.PORT || 5000;

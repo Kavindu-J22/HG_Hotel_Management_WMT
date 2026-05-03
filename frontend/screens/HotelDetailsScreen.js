@@ -4,6 +4,7 @@ import api from '../services/api';
 import { LinearGradient } from 'expo-linear-gradient';
 import MapView, { Marker } from 'react-native-maps';
 import ReviewsSection from '../components/ReviewsSection';
+import WishlistButton from '../components/WishlistButton';
 
 const { width } = Dimensions.get('window');
 
@@ -119,6 +120,7 @@ const HotelDetailsScreen = ({ route, navigation }) => {
                 <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
                     <Text style={styles.backButtonText}>←</Text>
                 </TouchableOpacity>
+                <WishlistButton itemType="Hotel" itemId={hotel._id} />
             </View>
 
             <View style={styles.detailsContainer}>

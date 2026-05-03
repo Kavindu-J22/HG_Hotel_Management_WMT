@@ -30,9 +30,30 @@ const TourPlanSchema = new mongoose.Schema({
         type: [String],
         default: []
     },
+    amenities: {
+        type: [String],
+        default: []
+    },
+    pax: {
+        type: Number,
+        required: [true, 'Please specify maximum group size (pax)']
+    },
+    transport: {
+        type: String,
+        required: [true, 'Please specify transport method']
+    },
     isActive: {
         type: Boolean,
         default: true
+    },
+    averageRating: {
+        type: Number,
+        min: [1, 'Rating must be at least 1'],
+        max: [5, 'Rating must can not be more than 5']
+    },
+    reviewCount: {
+        type: Number,
+        default: 0
     },
     createdAt: {
         type: Date,

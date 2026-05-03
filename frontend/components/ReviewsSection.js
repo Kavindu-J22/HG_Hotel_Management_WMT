@@ -9,7 +9,7 @@ const ReviewsSection = ({ itemId, itemType }) => {
     const [loading, setLoading] = useState(true);
 
     // Form state
-    const [rating, setRating] = useState('5');
+    const [rating, setRating] = useState(5);
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');
     const [submitting, setSubmitting] = useState(false);
@@ -55,7 +55,7 @@ const ReviewsSection = ({ itemId, itemType }) => {
             setReviews([{ ...res.data.data, user: { name: user.name } }, ...reviews]);
             setTitle('');
             setText('');
-            setRating('5');
+            setRating(5);
             Alert.alert('Success', 'Review submitted!');
         } catch (error) {
             Alert.alert('Error', error.response?.data?.error || 'Could not submit review. You may have already reviewed this item.');
@@ -108,14 +108,16 @@ const ReviewsSection = ({ itemId, itemType }) => {
                     <Text style={styles.addReviewTitle}>Write a Review</Text>
                     
                     <View style={styles.ratingInputContainer}>
-                        <Text style={styles.label}>Rating (1-5):</Text>
-                        <TextInput 
-                            style={styles.ratingInput}
-                            value={rating}
-                            onChangeText={setRating}
-                            keyboardType="numeric"
-                            maxLength={1}
-                        />
+                        <Text style={styles.label}>Rating:</Text>
+                        <View style={styles.starsContainer}>
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <TouchableOpacity key={star} onPress={() => setRating(star)}>
+                                    <Text style={[styles.starIcon, rating >= star ? styles.starSelected : styles.starUnselected]}>
+                                        ★
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
                     </View>
 
                     <TextInput 
@@ -164,9 +166,12 @@ const styles = StyleSheet.create({
     
     addReviewContainer: { marginTop: 24, backgroundColor: '#FFF', padding: 16, borderRadius: 16, elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 6 },
     addReviewTitle: { fontSize: 18, fontWeight: 'bold', color: '#2D3142', marginBottom: 16 },
-    ratingInputContainer: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-    label: { fontSize: 14, color: '#666', marginRight: 10 },
-    ratingInput: { borderWidth: 1, borderColor: '#DDD', borderRadius: 8, padding: 8, width: 60, textAlign: 'center', fontSize: 16 },
+    ratingInputContainer: { flexDirection: 'row', alignItems: 'center', marginBottom: 16 },
+    label: { fontSize: 15, color: '#666', marginRight: 12, fontWeight: '600' },
+    starsContainer: { flexDirection: 'row' },
+    starIcon: { fontSize: 32, marginRight: 6 },
+    starSelected: { color: '#FFD700' },
+    starUnselected: { color: '#E0E0E0' },
     input: { borderWidth: 1, borderColor: '#DDD', borderRadius: 8, padding: 12, marginBottom: 12, fontSize: 14, backgroundColor: '#FAFAFA' },
     textArea: { height: 100, textAlignVertical: 'top' },
     submitButton: { backgroundColor: '#4facfe', padding: 14, borderRadius: 8, alignItems: 'center' },

@@ -12,6 +12,8 @@ const HomeScreen = ({ navigation }) => {
         { id: 1, title: 'Hotels & Rooms', subtitle: 'Find the perfect stay', colors: ['#FF6B6B', '#FF8E53'], route: 'Hotels' },
         { id: 2, title: 'Vehicles', subtitle: 'Rent cars, vans & more', colors: ['#4facfe', '#00f2fe'], route: 'Vehicles' },
         { id: 3, title: 'Tour Guides', subtitle: 'Local experts & plans', colors: ['#43e97b', '#38f9d7'], route: 'TourGuides' },
+        { id: 4, title: 'My Bookings', subtitle: 'View your history', colors: ['#667eea', '#764ba2'], route: 'Dashboard' },
+        { id: 5, title: 'My Wishlist', subtitle: 'Saved places & services', colors: ['#FF6B6B', '#FF8E53'], route: 'Wishlist' },
     ];
 
     const providerCategories = [

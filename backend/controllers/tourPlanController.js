@@ -68,6 +68,14 @@ exports.addPlan = async (req, res) => {
             req.body.images = req.files.map(file => `/uploads/${file.filename}`);
         }
 
+        // Parse array fields if they come as strings
+        if (typeof req.body.destinations === 'string') {
+            req.body.destinations = req.body.destinations.split(',').map(item => item.trim());
+        }
+        if (typeof req.body.amenities === 'string') {
+            req.body.amenities = req.body.amenities.split(',').map(item => item.trim());
+        }
+
         const plan = await TourPlan.create(req.body);
 
         res.status(201).json({ success: true, data: plan });
@@ -96,6 +104,14 @@ exports.updatePlan = async (req, res) => {
         if (req.files && req.files.length > 0) {
             const newImages = req.files.map(file => `/uploads/${file.filename}`);
             req.body.images = [...plan.images, ...newImages];
+        }
+
+        // Parse array fields if they come as strings
+        if (typeof req.body.destinations === 'string') {
+            req.body.destinations = req.body.destinations.split(',').map(item => item.trim());
+        }
+        if (typeof req.body.amenities === 'string') {
+            req.body.amenities = req.body.amenities.split(',').map(item => item.trim());
         }
 
         plan = await TourPlan.findByIdAndUpdate(req.params.id, req.body, {

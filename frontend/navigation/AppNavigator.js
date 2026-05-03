@@ -28,6 +28,10 @@ import AddEditGuideScreen from '../screens/AddEditGuideScreen';
 import AdminGuidesScreen from '../screens/AdminGuidesScreen';
 import TourGuideDetailsScreen from '../screens/TourGuideDetailsScreen';
 import ProviderReviewsScreen from '../screens/ProviderReviewsScreen';
+import ProviderTourPlansScreen from '../screens/ProviderTourPlansScreen';
+import AddEditTourPlanScreen from '../screens/AddEditTourPlanScreen';
+import TourPlanDetailsScreen from '../screens/TourPlanDetailsScreen';
+import WishlistScreen from '../screens/WishlistScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -55,7 +59,9 @@ const AppNavigator = () => {
                         <Stack.Screen name="VehicleDetails" component={VehicleDetailsScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="TourGuides" component={TourGuidesScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="TourGuideDetails" component={TourGuideDetailsScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="TourPlanDetails" component={TourPlanDetailsScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="Booking" component={BookingScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="Wishlist" component={WishlistScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="ProviderHotels" component={ProviderHotelsScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="AddEditHotel" component={AddEditHotelScreen} options={{ headerShown: false }} />
@@ -69,6 +75,8 @@ const AppNavigator = () => {
                         <Stack.Screen name="AddEditGuide" component={AddEditGuideScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="AdminGuides" component={AdminGuidesScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="ProviderReviews" component={ProviderReviewsScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="ProviderTourPlans" component={ProviderTourPlansScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="AddEditTourPlan" component={AddEditTourPlanScreen} options={{ headerShown: false }} />
                     </>
                 ) : (
                     // Auth Flow
