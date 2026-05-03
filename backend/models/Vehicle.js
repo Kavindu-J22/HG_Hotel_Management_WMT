@@ -9,6 +9,10 @@ const VehicleSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add a model']
     },
+    description: {
+        type: String,
+        required: [true, 'Please add a description']
+    },
     type: {
         type: String,
         enum: ['Car', 'Van', 'SUV', 'Bus'],
@@ -39,6 +43,19 @@ const VehicleSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'User',
         required: true
+    },
+    isApproved: {
+        type: Boolean,
+        default: false
+    },
+    averageRating: {
+        type: Number,
+        min: [1, 'Rating must be at least 1'],
+        max: [5, 'Rating must can not be more than 5']
+    },
+    reviewCount: {
+        type: Number,
+        default: 0
     },
     createdAt: {
         type: Date,

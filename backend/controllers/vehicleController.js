@@ -16,12 +16,21 @@ exports.getVehicles = async (req, res) => {
         // Loop over removeFields and delete them from reqQuery
         removeFields.forEach(param => delete reqQuery[param]);
 
-        // Don't show vehicles in maintenance mode to public
+        let queryStr = JSON.stringify(reqQuery);
+        queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
+        let queryObj = JSON.parse(queryStr);
+
+        // Don't show vehicles in maintenance mode to public and only show approved
         if (!req.user || req.user.role === 'tourist') {
-            reqQuery.maintenanceMode = false;
+            queryObj.maintenanceMode = false;
+            queryObj.isApproved = true;
         }
 
-        query = Vehicle.find(reqQuery).populate('provider', 'name email');
+        if (req.query.brand) {
+            queryObj.brand = { $regex: req.query.brand, $options: 'i' };
+        }
+
+        query = Vehicle.find(queryObj).populate('provider', 'name email');
 
         const vehicles = await query;
 
@@ -61,7 +70,7 @@ exports.createVehicle = async (req, res) => {
         req.body.provider = req.user.id;
 
         if (req.files) {
-            req.body.images = req.files.map(file => `/uploads/${file.filename}`);
+            req.body.images = req.files.map(file => file.path);
         }
 
         const vehicle = await Vehicle.create(req.body);
@@ -87,7 +96,7 @@ exports.updateVehicle = async (req, res) => {
         }
 
         if (req.files && req.files.length > 0) {
-            const newImages = req.files.map(file => `/uploads/${file.filename}`);
+            const newImages = req.files.map(file => file.path);
             req.body.images = [...vehicle.images, ...newImages];
         }
 
@@ -120,6 +129,32 @@ exports.deleteVehicle = async (req, res) => {
         await vehicle.deleteOne();
 
         res.status(200).json({ success: true, data: {} });
+    } catch (error) {
+        res.status(400).json({ success: false, error: error.message });
+    }
+};
+
+// @desc    Approve vehicle
+// @route   PUT /api/vehicles/:id/approve
+// @access  Private (Admin)
+exports.approveVehicle = async (req, res) => {
+    try {
+        if (req.user.role !== 'admin') {
+            return res.status(401).json({ success: false, error: 'Not authorized to approve vehicles' });
+        }
+
+        let vehicle = await Vehicle.findById(req.params.id);
+
+        if (!vehicle) {
+            return res.status(404).json({ success: false, error: 'Vehicle not found' });
+        }
+
+        vehicle = await Vehicle.findByIdAndUpdate(req.params.id, { isApproved: true }, {
+            new: true,
+            runValidators: true
+        });
+
+        res.status(200).json({ success: true, data: vehicle });
     } catch (error) {
         res.status(400).json({ success: false, error: error.message });
     }

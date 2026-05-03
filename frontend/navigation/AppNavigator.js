@@ -19,6 +19,10 @@ import ProviderRoomsScreen from '../screens/ProviderRoomsScreen';
 import AddEditRoomScreen from '../screens/AddEditRoomScreen';
 import HotelDetailsScreen from '../screens/HotelDetailsScreen';
 import AdminHotelsScreen from '../screens/AdminHotelsScreen';
+import ProviderVehiclesScreen from '../screens/ProviderVehiclesScreen';
+import AddEditVehicleScreen from '../screens/AddEditVehicleScreen';
+import AdminVehiclesScreen from '../screens/AdminVehiclesScreen';
+import VehicleDetailsScreen from '../screens/VehicleDetailsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +47,7 @@ const AppNavigator = () => {
                         <Stack.Screen name="Hotels" component={HotelsScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="HotelDetails" component={HotelDetailsScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="Vehicles" component={VehiclesScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="VehicleDetails" component={VehicleDetailsScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="TourGuides" component={TourGuidesScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="Booking" component={BookingScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ headerShown: false }} />
@@ -51,6 +56,9 @@ const AppNavigator = () => {
                         <Stack.Screen name="ProviderRooms" component={ProviderRoomsScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="AddEditRoom" component={AddEditRoomScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="AdminHotels" component={AdminHotelsScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="ProviderVehicles" component={ProviderVehiclesScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="AddEditVehicle" component={AddEditVehicleScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="AdminVehicles" component={AdminVehiclesScreen} options={{ headerShown: false }} />
                     </>
                 ) : (
                     // Auth Flow

@@ -4,7 +4,8 @@ const {
     getVehicle,
     createVehicle,
     updateVehicle,
-    deleteVehicle
+    deleteVehicle,
+    approveVehicle
 } = require('../controllers/vehicleController');
 const upload = require('../middlewares/uploadMiddleware');
 const { protect, authorize } = require('../middlewares/authMiddleware');
@@ -30,5 +31,9 @@ router
     .get(optionalAuth, getVehicle)
     .put(protect, authorize('provider', 'admin'), upload.array('images', 5), updateVehicle)
     .delete(protect, authorize('provider', 'admin'), deleteVehicle);
+
+router
+    .route('/:id/approve')
+    .put(protect, authorize('admin'), approveVehicle);
 
 module.exports = router;
