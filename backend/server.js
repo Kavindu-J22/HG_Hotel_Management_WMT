@@ -37,6 +37,7 @@ app.use('/api/guides', tourGuideRoutes);
 app.use('/api/plans', tourPlanRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/items/:itemId/reviews', reviewRoutes);
 
 // Define PORT
 const PORT = process.env.PORT || 5000;
