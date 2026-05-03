@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, ActivityIndicator, Dimensions } from 'react-native';
 import api from '../services/api';
 import { LinearGradient } from 'expo-linear-gradient';
+import ReviewsSection from '../components/ReviewsSection';
 
 const { width } = Dimensions.get('window');
 
@@ -91,7 +92,11 @@ const VehicleDetailsScreen = ({ route, navigation }) => {
                 <Text style={styles.sectionTitle}>Description</Text>
                 <Text style={styles.description}>{vehicle.description}</Text>
 
+                {/* Reviews Section */}
+                <ReviewsSection itemId={vehicle._id} itemType="Vehicle" />
             </View>
+
+            <View style={{ height: 80 }} /> {/* Bottom padding */}
 
             {/* Bottom Book Button */}
             <View style={styles.bottomBar}>
@@ -133,7 +138,7 @@ const styles = StyleSheet.create({
     specValue: { fontSize: 16, fontWeight: 'bold', color: '#2D3142' },
     specLabel: { fontSize: 12, color: '#9E9EA7', marginTop: 4 },
     sectionTitle: { fontSize: 20, fontWeight: 'bold', color: '#2D3142', marginBottom: 12 },
-    description: { fontSize: 16, color: '#666', lineHeight: 24, marginBottom: 100 },
+    description: { fontSize: 16, color: '#666', lineHeight: 24, marginBottom: 20 },
     bottomBar: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20, backgroundColor: '#FFF', borderTopWidth: 1, borderColor: '#EEE' },
     bookButton: { borderRadius: 16, overflow: 'hidden', elevation: 5, shadowColor: '#4facfe', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 5 },
     bookButtonGradient: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 24, paddingVertical: 16 },

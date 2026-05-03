@@ -40,6 +40,15 @@ const TourGuideSchema = new mongoose.Schema({
         type: Boolean,
         default: false // Admin approval required to be visible
     },
+    averageRating: {
+        type: Number,
+        min: [1, 'Rating must be at least 1'],
+        max: [5, 'Rating must can not be more than 5']
+    },
+    reviewCount: {
+        type: Number,
+        default: 0
+    },
     createdAt: {
         type: Date,
         default: Date.now

@@ -27,6 +27,7 @@ import ProviderGuideScreen from '../screens/ProviderGuideScreen';
 import AddEditGuideScreen from '../screens/AddEditGuideScreen';
 import AdminGuidesScreen from '../screens/AdminGuidesScreen';
 import TourGuideDetailsScreen from '../screens/TourGuideDetailsScreen';
+import ProviderReviewsScreen from '../screens/ProviderReviewsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -67,6 +68,7 @@ const AppNavigator = () => {
                         <Stack.Screen name="ProviderGuide" component={ProviderGuideScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="AddEditGuide" component={AddEditGuideScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="AdminGuides" component={AdminGuidesScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="ProviderReviews" component={ProviderReviewsScreen} options={{ headerShown: false }} />
                     </>
                 ) : (
                     // Auth Flow

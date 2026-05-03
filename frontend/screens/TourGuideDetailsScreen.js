@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import api from '../services/api';
 import { LinearGradient } from 'expo-linear-gradient';
+import ReviewsSection from '../components/ReviewsSection';
 
 const TourGuideDetailsScreen = ({ route, navigation }) => {
     const { guideId } = route.params;
@@ -101,9 +102,12 @@ const TourGuideDetailsScreen = ({ route, navigation }) => {
                 <Text style={styles.sectionTitle}>About Me</Text>
                 <Text style={styles.description}>{guide.bio}</Text>
 
-                {/* Booking Notice -> Replaced with Book Button */}
+                {/* Reviews Section */}
+                <ReviewsSection itemId={guide._id} itemType="TourGuide" />
             </View>
             
+            <View style={{ height: 80 }} /> {/* Bottom padding */}
+
             {/* Bottom Book Button */}
             <View style={styles.bottomBar}>
                 <TouchableOpacity 
@@ -148,7 +152,7 @@ const styles = StyleSheet.create({
     languagesContainer: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: 24 },
     languagePill: { backgroundColor: '#E8F5E9', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, marginRight: 10, marginBottom: 10 },
     languageText: { color: '#43e97b', fontWeight: 'bold', fontSize: 14 },
-    description: { fontSize: 16, color: '#666', lineHeight: 24, marginBottom: 100 },
+    description: { fontSize: 16, color: '#666', lineHeight: 24, marginBottom: 20 },
     bottomBar: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: 20, backgroundColor: '#FFF', borderTopWidth: 1, borderColor: '#EEE' },
     bookButton: { borderRadius: 16, overflow: 'hidden', elevation: 5, shadowColor: '#38f9d7', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 5 },
     bookButtonGradient: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 24, paddingVertical: 16 },

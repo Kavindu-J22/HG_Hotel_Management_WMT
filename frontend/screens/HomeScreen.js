@@ -19,6 +19,7 @@ const HomeScreen = ({ navigation }) => {
         { id: 2, title: 'Manage Vehicles', subtitle: 'Add/Edit your rental fleet', colors: ['#4facfe', '#00f2fe'], route: 'ProviderVehicles' },
         { id: 3, title: 'Manage Guide Profile', subtitle: 'Update your public persona', colors: ['#43e97b', '#38f9d7'], route: 'ProviderGuide' },
         { id: 4, title: 'Incoming Bookings', subtitle: 'Confirm or Reject requests', colors: ['#667eea', '#764ba2'], route: 'Dashboard' },
+        { id: 5, title: 'Manage Reviews', subtitle: 'View & reply to feedback', colors: ['#9C27B0', '#E040FB'], route: 'ProviderReviews' },
     ];
 
     const adminCategories = [

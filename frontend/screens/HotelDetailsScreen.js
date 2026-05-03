@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Image, FlatList, TouchableOpacity, 
 import api from '../services/api';
 import { LinearGradient } from 'expo-linear-gradient';
 import MapView, { Marker } from 'react-native-maps';
+import ReviewsSection from '../components/ReviewsSection';
 
 const { width } = Dimensions.get('window');
 
@@ -160,6 +161,9 @@ const HotelDetailsScreen = ({ route, navigation }) => {
                 ) : (
                     <Text style={styles.noRoomsText}>No rooms available for this property.</Text>
                 )}
+
+                {/* Reviews Section */}
+                <ReviewsSection itemId={hotel._id} itemType="Hotel" />
                 
                 <View style={{ height: 40 }} />
             </View>

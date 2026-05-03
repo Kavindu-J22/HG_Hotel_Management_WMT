@@ -32,6 +32,14 @@ const ReviewSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    providerReply: {
+        type: String,
+        default: null
+    },
+    providerRepliedAt: {
+        type: Date,
+        default: null
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -42,7 +50,7 @@ const ReviewSchema = new mongoose.Schema({
 ReviewSchema.index({ itemId: 1, user: 1 }, { unique: true });
 
 // Static method to get avg rating
-ReviewSchema.statics.getAverageRating = async function (itemId) {
+ReviewSchema.statics.getAverageRating = async function (itemId, itemType) {
     const obj = await this.aggregate([
         {
             $match: { itemId: itemId }
@@ -50,14 +58,30 @@ ReviewSchema.statics.getAverageRating = async function (itemId) {
         {
             $group: {
                 _id: '$itemId',
-                averageRating: { $avg: '$rating' }
+                averageRating: { $avg: '$rating' },
+                reviewCount: { $sum: 1 }
             }
         }
     ]);
 
     try {
-        if (obj[0]) {
-            console.log(`Average rating for ${itemId} is ${obj[0].averageRating}`);
+        let updateModel;
+        if (itemType === 'Hotel') updateModel = mongoose.model('Hotel');
+        else if (itemType === 'Vehicle') updateModel = mongoose.model('Vehicle');
+        else if (itemType === 'TourGuide') updateModel = mongoose.model('TourGuide');
+
+        if (updateModel) {
+            if (obj[0]) {
+                await updateModel.findByIdAndUpdate(itemId, {
+                    averageRating: Math.round(obj[0].averageRating * 10) / 10,
+                    reviewCount: obj[0].reviewCount
+                });
+            } else {
+                await updateModel.findByIdAndUpdate(itemId, {
+                    averageRating: undefined,
+                    reviewCount: 0
+                });
+            }
         }
     } catch (err) {
         console.error(err);
@@ -66,12 +90,12 @@ ReviewSchema.statics.getAverageRating = async function (itemId) {
 
 // Call getAverageRating after save
 ReviewSchema.post('save', function () {
-    this.constructor.getAverageRating(this.itemId);
+    this.constructor.getAverageRating(this.itemId, this.itemType);
 });
 
 // Call getAverageRating before remove
 ReviewSchema.pre('deleteOne', { document: true }, function () {
-    this.constructor.getAverageRating(this.itemId);
+    this.constructor.getAverageRating(this.itemId, this.itemType);
 });
 
 module.exports = mongoose.model('Review', ReviewSchema);
