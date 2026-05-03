@@ -17,6 +17,7 @@ import ProviderHotelsScreen from '../screens/ProviderHotelsScreen';
 import AddEditHotelScreen from '../screens/AddEditHotelScreen';
 import ProviderRoomsScreen from '../screens/ProviderRoomsScreen';
 import AddEditRoomScreen from '../screens/AddEditRoomScreen';
+import HotelDetailsScreen from '../screens/HotelDetailsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +40,7 @@ const AppNavigator = () => {
                     <>
                         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="Hotels" component={HotelsScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="HotelDetails" component={HotelDetailsScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="Vehicles" component={VehiclesScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="TourGuides" component={TourGuidesScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="Booking" component={BookingScreen} options={{ headerShown: false }} />

@@ -9,6 +9,10 @@ const HotelSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add a location']
     },
+    description: {
+        type: String,
+        required: [true, 'Please add a description']
+    },
     facilities: {
         type: [String],
         default: []
@@ -25,6 +29,15 @@ const HotelSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'User',
         required: true
+    },
+    averageRating: {
+        type: Number,
+        min: [1, 'Rating must be at least 1'],
+        max: [5, 'Rating must can not be more than 5']
+    },
+    reviewCount: {
+        type: Number,
+        default: 0
     },
     createdAt: {
         type: Date,

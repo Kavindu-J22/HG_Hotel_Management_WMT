@@ -4,7 +4,8 @@ const {
     getHotel,
     createHotel,
     updateHotel,
-    deleteHotel
+    deleteHotel,
+    approveHotel
 } = require('../controllers/hotelController');
 const upload = require('../middlewares/uploadMiddleware');
 const { protect, authorize } = require('../middlewares/authMiddleware');
@@ -27,5 +28,9 @@ router
     .get(getHotel)
     .put(protect, authorize('provider', 'admin'), upload.array('images', 5), updateHotel)
     .delete(protect, authorize('provider', 'admin'), deleteHotel);
+
+router
+    .route('/:id/approve')
+    .put(protect, authorize('admin'), approveHotel);
 
 module.exports = router;

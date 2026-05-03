@@ -9,10 +9,26 @@ exports.getRooms = async (req, res) => {
     try {
         let query;
 
+        // Copy req.query
+        const reqQuery = { ...req.query };
+
+        // Fields to exclude from direct match
+        const removeFields = ['select', 'sort', 'page', 'limit'];
+        removeFields.forEach(param => delete reqQuery[param]);
+
+        // Create query string
+        let queryStr = JSON.stringify(reqQuery);
+
+        // Create operators ($gt, $gte, etc)
+        queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
+
+        const parsedQuery = JSON.parse(queryStr);
+
         if (req.params.hotelId) {
-            query = Room.find({ hotel: req.params.hotelId });
+            parsedQuery.hotel = req.params.hotelId;
+            query = Room.find(parsedQuery);
         } else {
-            query = Room.find().populate({
+            query = Room.find(parsedQuery).populate({
                 path: 'hotel',
                 select: 'name location'
             });
@@ -64,7 +80,7 @@ exports.addRoom = async (req, res) => {
         }
 
         if (req.files) {
-            req.body.images = req.files.map(file => `/uploads/${file.filename}`);
+            req.body.images = req.files.map(file => file.path);
         }
 
         const room = await Room.create(req.body);
@@ -94,7 +110,7 @@ exports.updateRoom = async (req, res) => {
         }
 
         if (req.files && req.files.length > 0) {
-            const newImages = req.files.map(file => `/uploads/${file.filename}`);
+            const newImages = req.files.map(file => file.path);
             req.body.images = [...room.images, ...newImages];
         }
 
