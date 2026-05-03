@@ -75,12 +75,12 @@ const ReviewsSection = ({ itemId, itemType }) => {
             <Text style={styles.reviewTitle}>{item.title}</Text>
             <Text style={styles.reviewText}>{item.text}</Text>
             
-            {item.providerReply && (
+            {item.providerReply ? (
                 <View style={styles.replyBox}>
                     <Text style={styles.replyHeader}>↳ Provider Reply</Text>
                     <Text style={styles.replyText}>{item.providerReply}</Text>
                 </View>
-            )}
+            ) : null}
         </View>
     );
 

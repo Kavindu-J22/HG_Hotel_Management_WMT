@@ -48,7 +48,11 @@ const TourPlanDetailsScreen = ({ route, navigation }) => {
                 {plan.images && plan.images.length > 0 ? (
                     <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
                         {plan.images.map((img, index) => (
-                            <Image key={index} source={{ uri: img }} style={styles.galleryImage} />
+                            <Image 
+                                key={index} 
+                                source={{ uri: img.startsWith('http') ? img : `${api.defaults.baseURL.replace('/api', '')}${img}` }} 
+                                style={styles.galleryImage} 
+                            />
                         ))}
                     </ScrollView>
                 ) : (

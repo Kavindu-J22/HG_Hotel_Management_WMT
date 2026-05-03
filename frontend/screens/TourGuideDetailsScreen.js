@@ -64,11 +64,11 @@ const TourGuideDetailsScreen = ({ route, navigation }) => {
                         source={{ uri: guide.profileImage ? guide.profileImage : 'https://via.placeholder.com/150' }} 
                         style={styles.profileImage} 
                     />
-                    {guide.isVerified && (
+                    {guide.isVerified ? (
                         <View style={styles.verifiedBadge}>
                             <Text style={styles.verifiedText}>✓</Text>
                         </View>
-                    )}
+                    ) : null}
                 </View>
 
                 <View style={styles.headerInfo}>
@@ -118,9 +118,12 @@ const TourGuideDetailsScreen = ({ route, navigation }) => {
                             style={styles.planCard}
                             onPress={() => navigation.navigate('TourPlanDetails', { planId: plan._id })}
                         >
-                            {plan.images && plan.images.length > 0 && (
-                                <Image source={{ uri: plan.images[0] }} style={styles.planImage} />
-                            )}
+                            {plan.images && plan.images.length > 0 ? (
+                                <Image 
+                                    source={{ uri: plan.images[0].startsWith('http') ? plan.images[0] : `${api.defaults.baseURL.replace('/api', '')}${plan.images[0]}` }} 
+                                    style={styles.planImage} 
+                                />
+                            ) : null}
                             <View style={styles.planInfo}>
                                 <Text style={styles.planTitle}>{plan.title}</Text>
                                 <Text style={styles.planSpecs}>{plan.durationDays} Days | Pax: {plan.pax}</Text>

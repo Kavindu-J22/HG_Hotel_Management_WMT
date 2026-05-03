@@ -45,7 +45,8 @@ const DashboardScreen = ({ navigation }) => {
     };
 
     const renderBooking = ({ item }) => {
-        const itemTitle = item.itemId?.title || item.itemId?.name || `${item.itemId?.brand} ${item.itemId?.model}` || 'Item';
+        const brandModel = (item.itemId?.brand || item.itemId?.model) ? `${item.itemId?.brand || ''} ${item.itemId?.model || ''}`.trim() : '';
+        const itemTitle = item.itemId?.title || item.itemId?.name || brandModel || 'Tour/Service';
         const isTourist = user.role === 'tourist';
 
         return (
@@ -53,7 +54,7 @@ const DashboardScreen = ({ navigation }) => {
                 <View style={styles.cardHeader}>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.cardTitle}>{item.itemType} - {itemTitle}</Text>
-                        <Text style={styles.bookingIdText}>Ref: {item.bookingId}</Text>
+                        <Text style={styles.bookingIdText}>Ref: {item.bookingId || item._id.substring(item._id.length - 6).toUpperCase()}</Text>
                     </View>
                     <View style={[styles.badge, item.status === 'Confirmed' ? styles.badgeSuccess : styles.badgePending]}>
                         <Text style={styles.badgeText}>{item.status}</Text>
