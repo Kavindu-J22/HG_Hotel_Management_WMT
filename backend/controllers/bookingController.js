@@ -127,7 +127,7 @@ exports.addBooking = async (req, res) => {
                 await sendEmail({
                     email: provider.email,
                     subject: 'New Booking Request Received',
-                    message: `You have received a new booking request for ${itemType} (ID: ${itemId}).\nDates: ${startDate} to ${endDate}\nTotal Price: $${req.body.totalPrice}\n\nPlease check your Provider Dashboard to confirm or reject this booking.`
+                    message: `You have received a new booking request for ${itemType} (Ref: ${booking.bookingId}).\nDates: ${startDate} to ${endDate}\nTotal Price: $${req.body.totalPrice}\n\nPlease check your Provider Dashboard to confirm or reject this booking.`
                 });
             } catch (e) {
                 console.error('Failed to send email to provider', e);
@@ -170,7 +170,7 @@ exports.updateBooking = async (req, res) => {
                         await sendEmail({
                             email: booking.user.email,
                             subject: 'Booking Confirmation',
-                            message: `Your booking (ID: ${booking._id}) has been confirmed!`,
+                            message: `Your booking (ID: ${booking.bookingId}) has been confirmed!`,
                             attachments: [
                                 {
                                     filename: filename,
@@ -193,7 +193,7 @@ exports.updateBooking = async (req, res) => {
                 await sendEmail({
                     email: booking.user.email,
                     subject: 'Booking Request Rejected',
-                    message: `Unfortunately, your booking request (ID: ${booking._id}) has been rejected by the provider. Please explore other available options in our app.`
+                    message: `Unfortunately, your booking request (ID: ${booking.bookingId}) has been rejected by the provider. Please explore other available options in our app.`
                 });
             } catch (e) {
                 console.error('Failed to send rejection email to tourist', e);

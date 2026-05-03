@@ -51,7 +51,10 @@ const DashboardScreen = ({ navigation }) => {
         return (
             <View style={styles.card}>
                 <View style={styles.cardHeader}>
-                    <Text style={styles.cardTitle}>{item.itemType} - {itemTitle}</Text>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.cardTitle}>{item.itemType} - {itemTitle}</Text>
+                        <Text style={styles.bookingIdText}>Ref: {item.bookingId}</Text>
+                    </View>
                     <View style={[styles.badge, item.status === 'Confirmed' ? styles.badgeSuccess : styles.badgePending]}>
                         <Text style={styles.badgeText}>{item.status}</Text>
                     </View>
@@ -172,8 +175,13 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: '#2D3142',
-        flex: 1,
         marginRight: 10,
+    },
+    bookingIdText: {
+        fontSize: 12,
+        color: '#9E9EA7',
+        fontWeight: 'bold',
+        marginTop: 2,
     },
     badge: {
         paddingHorizontal: 10,

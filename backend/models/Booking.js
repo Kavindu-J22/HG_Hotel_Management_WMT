@@ -6,6 +6,10 @@ const BookingSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    bookingId: {
+        type: String,
+        unique: true
+    },
     itemType: {
         type: String,
         enum: ['Room', 'Vehicle', 'TourPlan', 'TourGuide'],
@@ -41,6 +45,14 @@ const BookingSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    }
+});
+
+// Generate unique bookingId before saving
+BookingSchema.pre('save', async function() {
+    if (!this.bookingId) {
+        const randomStr = Math.random().toString(36).substring(2, 8).toUpperCase();
+        this.bookingId = `BKG-${randomStr}`;
     }
 });
 
