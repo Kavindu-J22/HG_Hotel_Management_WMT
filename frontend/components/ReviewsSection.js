@@ -103,7 +103,7 @@ const ReviewsSection = ({ itemId, itemType }) => {
                 />
             )}
 
-            {user?.role === 'tourist' && (
+            {user?.role === 'tourist' ? (
                 <View style={styles.addReviewContainer}>
                     <Text style={styles.addReviewTitle}>Write a Review</Text>
                     
@@ -144,7 +144,7 @@ const ReviewsSection = ({ itemId, itemType }) => {
                         <Text style={styles.submitButtonText}>{submitting ? 'Submitting...' : 'Submit Review'}</Text>
                     </TouchableOpacity>
                 </View>
-            )}
+            ) : null}
         </View>
     );
 };

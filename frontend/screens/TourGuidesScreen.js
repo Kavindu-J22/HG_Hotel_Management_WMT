@@ -60,11 +60,11 @@ const TourGuidesScreen = ({ navigation }) => {
             <View style={styles.cardContent}>
                 <View style={styles.cardHeader}>
                     <Text style={styles.cardTitle}>{item.user?.name || 'Unknown Guide'}</Text>
-                    {item.isVerified && (
+                    {item.isVerified ? (
                         <View style={styles.badge}>
                             <Text style={styles.badgeText}>Verified</Text>
                         </View>
-                    )}
+                    ) : null}
                 </View>
                 <Text style={styles.cardSubtitle}>{item.experienceLevel} Guide</Text>
                 <Text style={styles.cardBio} numberOfLines={2}>{item.bio}</Text>

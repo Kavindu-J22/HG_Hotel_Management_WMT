@@ -139,7 +139,7 @@ const TourGuideDetailsScreen = ({ route, navigation }) => {
                 <ReviewsSection itemId={guide._id} itemType="TourGuide" />
             </View>
             
-            <View style={{ height: 40 }} /> {/* Bottom padding */}
+            <View style={{ height: 40 }} />
         </ScrollView>
     );
 };
