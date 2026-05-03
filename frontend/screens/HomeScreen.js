@@ -17,12 +17,14 @@ const HomeScreen = ({ navigation }) => {
     const providerCategories = [
         { id: 1, title: 'Manage Hotels', subtitle: 'Add/Edit your properties & rooms', colors: ['#FF6B6B', '#FF8E53'], route: 'ProviderHotels' },
         { id: 2, title: 'Manage Vehicles', subtitle: 'Add/Edit your rental fleet', colors: ['#4facfe', '#00f2fe'], route: 'ProviderVehicles' },
-        { id: 3, title: 'Incoming Bookings', subtitle: 'Confirm or Reject requests', colors: ['#43e97b', '#38f9d7'], route: 'Dashboard' },
+        { id: 3, title: 'Manage Guide Profile', subtitle: 'Update your public persona', colors: ['#43e97b', '#38f9d7'], route: 'ProviderGuide' },
+        { id: 4, title: 'Incoming Bookings', subtitle: 'Confirm or Reject requests', colors: ['#667eea', '#764ba2'], route: 'Dashboard' },
     ];
 
     const adminCategories = [
         { id: 1, title: 'Approve Hotels', subtitle: 'Review pending properties', colors: ['#9C27B0', '#E040FB'], route: 'AdminHotels' },
         { id: 2, title: 'Approve Vehicles', subtitle: 'Review pending vehicles', colors: ['#4facfe', '#00f2fe'], route: 'AdminVehicles' },
+        { id: 3, title: 'Approve Tour Guides', subtitle: 'Review pending guides', colors: ['#43e97b', '#38f9d7'], route: 'AdminGuides' },
     ];
 
     let categories = touristCategories;

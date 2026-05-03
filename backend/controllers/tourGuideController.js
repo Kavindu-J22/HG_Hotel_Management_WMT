@@ -5,7 +5,20 @@ const TourGuide = require('../models/TourGuide');
 // @access  Public
 exports.getGuides = async (req, res) => {
     try {
-        const guides = await TourGuide.find().populate('user', 'name email');
+        let queryObj = { ...req.query };
+        const removeFields = ['select', 'sort', 'page', 'limit'];
+        removeFields.forEach(param => delete queryObj[param]);
+
+        // Only show approved guides to tourists
+        if (!req.user || req.user.role === 'tourist') {
+            queryObj.isApproved = true;
+        }
+
+        if (req.query.languages) {
+            queryObj.languages = { $regex: req.query.languages, $options: 'i' };
+        }
+
+        const guides = await TourGuide.find(queryObj).populate('user', 'name email');
         res.status(200).json({ success: true, count: guides.length, data: guides });
     } catch (error) {
         res.status(400).json({ success: false, error: error.message });
@@ -43,7 +56,7 @@ exports.createGuide = async (req, res) => {
         req.body.user = req.user.id;
 
         if (req.file) {
-            req.body.profileImage = `/uploads/${req.file.filename}`;
+            req.body.profileImage = req.file.path;
         }
 
         const guide = await TourGuide.create(req.body);
@@ -70,7 +83,7 @@ exports.updateGuide = async (req, res) => {
         }
 
         if (req.file) {
-            req.body.profileImage = `/uploads/${req.file.filename}`;
+            req.body.profileImage = req.file.path;
         }
 
         guide = await TourGuide.findByIdAndUpdate(req.params.id, req.body, {
@@ -102,6 +115,32 @@ exports.deleteGuide = async (req, res) => {
         await guide.deleteOne();
 
         res.status(200).json({ success: true, data: {} });
+    } catch (error) {
+        res.status(400).json({ success: false, error: error.message });
+    }
+};
+
+// @desc    Approve tour guide
+// @route   PUT /api/guides/:id/approve
+// @access  Private (Admin)
+exports.approveGuide = async (req, res) => {
+    try {
+        if (req.user.role !== 'admin') {
+            return res.status(401).json({ success: false, error: 'Not authorized to approve guides' });
+        }
+
+        let guide = await TourGuide.findById(req.params.id);
+
+        if (!guide) {
+            return res.status(404).json({ success: false, error: 'Tour Guide not found' });
+        }
+
+        guide = await TourGuide.findByIdAndUpdate(req.params.id, { isApproved: true }, {
+            new: true,
+            runValidators: true
+        });
+
+        res.status(200).json({ success: true, data: guide });
     } catch (error) {
         res.status(400).json({ success: false, error: error.message });
     }

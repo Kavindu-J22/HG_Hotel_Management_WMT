@@ -22,11 +22,23 @@ const TourGuideSchema = new mongoose.Schema({
     },
     profileImage: {
         type: String,
-        default: 'no-photo.jpg'
+        default: ''
+    },
+    contactNumber: {
+        type: String,
+        required: [true, 'Please add a contact number']
+    },
+    dailyRate: {
+        type: Number,
+        required: [true, 'Please add a daily rate']
     },
     isVerified: {
         type: Boolean,
         default: false // High rating verified badge
+    },
+    isApproved: {
+        type: Boolean,
+        default: false // Admin approval required to be visible
     },
     createdAt: {
         type: Date,
