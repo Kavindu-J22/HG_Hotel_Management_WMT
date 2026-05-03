@@ -56,7 +56,7 @@ const ProviderHotelsScreen = ({ navigation }) => {
     const renderHotel = ({ item }) => (
         <View style={styles.card}>
             <Image 
-                source={{ uri: item.images && item.images.length > 0 ? `http://10.0.2.2:5000${item.images[0]}` : 'https://via.placeholder.com/300x200?text=No+Image' }} 
+                source={{ uri: item.images && item.images.length > 0 ? item.images[0] : 'https://via.placeholder.com/300x200?text=No+Image' }} 
                 style={styles.cardImage} 
             />
             <View style={styles.cardContent}>
