@@ -4,7 +4,7 @@ import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const DashboardScreen = () => {
+const DashboardScreen = ({ navigation }) => {
     const { user, logout } = useContext(AuthContext);
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -103,6 +103,25 @@ const DashboardScreen = () => {
                     renderItem={renderBooking}
                     contentContainerStyle={styles.listContent}
                     showsVerticalScrollIndicator={false}
+                    ListHeaderComponent={() => (
+                        user?.role === 'provider' ? (
+                            <View style={styles.providerManagementSection}>
+                                <Text style={styles.sectionTitle}>Manage Your Services</Text>
+                                <View style={styles.managementButtons}>
+                                    <TouchableOpacity 
+                                        style={styles.manageButton}
+                                        onPress={() => navigation.navigate('ProviderHotels')}
+                                    >
+                                        <Text style={styles.manageButtonText}>Manage Hotels</Text>
+                                    </TouchableOpacity>
+                                    {/* Add buttons for Vehicles and Tour Plans later */}
+                                </View>
+                                <Text style={styles.sectionTitle}>Recent Bookings</Text>
+                            </View>
+                        ) : (
+                            <Text style={styles.sectionTitle}>Your Bookings</Text>
+                        )
+                    )}
                 />
             )}
         </View>
@@ -179,6 +198,40 @@ const styles = StyleSheet.create({
     },
     confirmButton: { flex: 1, backgroundColor: '#4caf50', marginRight: 8 },
     cancelButton: { flex: 1, backgroundColor: '#f44336', marginLeft: 8 },
+    providerManagementSection: {
+        marginBottom: 20,
+    },
+    sectionTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#2D3142',
+        marginBottom: 12,
+    },
+    managementButtons: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginBottom: 10,
+    },
+    manageButton: {
+        backgroundColor: '#FFF',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 12,
+        marginRight: 10,
+        marginBottom: 10,
+        elevation: 3,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        borderWidth: 1,
+        borderColor: '#4facfe',
+    },
+    manageButtonText: {
+        color: '#4facfe',
+        fontWeight: 'bold',
+        fontSize: 16,
+    }
 });
 
 export default DashboardScreen;

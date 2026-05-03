@@ -13,6 +13,10 @@ import HotelsScreen from '../screens/HotelsScreen';
 import VehiclesScreen from '../screens/VehiclesScreen';
 import TourGuidesScreen from '../screens/TourGuidesScreen';
 import BookingScreen from '../screens/BookingScreen';
+import ProviderHotelsScreen from '../screens/ProviderHotelsScreen';
+import AddEditHotelScreen from '../screens/AddEditHotelScreen';
+import ProviderRoomsScreen from '../screens/ProviderRoomsScreen';
+import AddEditRoomScreen from '../screens/AddEditRoomScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +43,10 @@ const AppNavigator = () => {
                         <Stack.Screen name="TourGuides" component={TourGuidesScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="Booking" component={BookingScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="ProviderHotels" component={ProviderHotelsScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="AddEditHotel" component={AddEditHotelScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="ProviderRooms" component={ProviderRoomsScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="AddEditRoom" component={AddEditRoomScreen} options={{ headerShown: false }} />
                     </>
                 ) : (
                     // Auth Flow

@@ -14,6 +14,8 @@ exports.register = async (req, res) => {
             password,
             role
         });
+        
+        console.log(`New user registered: ${user.email} with role: ${user.role}`);
 
         sendTokenResponse(user, 201, res);
     } catch (error) {

@@ -8,11 +8,18 @@ const { width } = Dimensions.get('window');
 const HomeScreen = ({ navigation }) => {
     const { user, logout } = useContext(AuthContext);
 
-    const categories = [
+    const touristCategories = [
         { id: 1, title: 'Hotels & Rooms', subtitle: 'Find the perfect stay', colors: ['#FF6B6B', '#FF8E53'], route: 'Hotels' },
         { id: 2, title: 'Vehicles', subtitle: 'Rent cars, vans & more', colors: ['#4facfe', '#00f2fe'], route: 'Vehicles' },
         { id: 3, title: 'Tour Guides', subtitle: 'Local experts & plans', colors: ['#43e97b', '#38f9d7'], route: 'TourGuides' },
     ];
+
+    const providerCategories = [
+        { id: 1, title: 'Manage Hotels', subtitle: 'Add/Edit your properties & rooms', colors: ['#FF6B6B', '#FF8E53'], route: 'ProviderHotels' },
+        { id: 2, title: 'View Incoming Bookings', subtitle: 'Confirm or Reject requests', colors: ['#4facfe', '#00f2fe'], route: 'Dashboard' },
+    ];
+
+    const categories = user?.role === 'provider' ? providerCategories : touristCategories;
 
     return (
         <View style={styles.container}>
@@ -27,7 +34,7 @@ const HomeScreen = ({ navigation }) => {
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-                <Text style={styles.sectionTitle}>Explore Categories</Text>
+                <Text style={styles.sectionTitle}>{user?.role === 'provider' ? 'Provider Tools' : 'Explore Categories'}</Text>
                 
                 {categories.map((cat) => (
                     <TouchableOpacity 
