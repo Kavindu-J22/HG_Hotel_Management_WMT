@@ -110,7 +110,7 @@ const TourGuideDetailsScreen = ({ route, navigation }) => {
                     style={styles.bookButton}
                     onPress={() => navigation.navigate('Booking', {
                         itemId: guide._id,
-                        itemType: 'TourPlan', // We assume TourPlan or TourGuide logic in backend handles it
+                        itemType: 'TourGuide',
                         itemTitle: `${guide.user?.name}'s Guided Tour`,
                         pricePerDay: guide.dailyRate || 50
                     })}

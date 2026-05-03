@@ -2,6 +2,7 @@ const Booking = require('../models/Booking');
 const Room = require('../models/Room');
 const Vehicle = require('../models/Vehicle');
 const TourPlan = require('../models/TourPlan');
+const TourGuide = require('../models/TourGuide');
 const sendEmail = require('../utils/sendEmail');
 const generatePDF = require('../utils/generatePDF');
 const fs = require('fs');
@@ -83,6 +84,11 @@ exports.addBooking = async (req, res) => {
             if (!item) return res.status(404).json({ success: false, error: 'TourPlan not found' });
             providerId = item.guide.user;
             pricePerDay = item.price / item.durationDays; // approx
+        } else if (itemType === 'TourGuide') {
+            item = await TourGuide.findById(itemId);
+            if (!item) return res.status(404).json({ success: false, error: 'TourGuide not found' });
+            providerId = item.user;
+            pricePerDay = item.dailyRate;
         } else {
             return res.status(400).json({ success: false, error: 'Invalid itemType' });
         }

@@ -8,7 +8,7 @@ const BookingSchema = new mongoose.Schema({
     },
     itemType: {
         type: String,
-        enum: ['Room', 'Vehicle', 'TourPlan'],
+        enum: ['Room', 'Vehicle', 'TourPlan', 'TourGuide'],
         required: true
     },
     itemId: {
