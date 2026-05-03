@@ -140,7 +140,7 @@ exports.updateBooking = async (req, res) => {
         });
 
         // If confirmed, send email and PDF receipt
-        if (status === 'Confirmed' && process.env.SMTP_EMAIL) {
+        if (status === 'Confirmed' && process.env.EMAIL_USER) {
             generatePDF(booking, booking.user, null, async (err, filePath, filename) => {
                 if (!err) {
                     try {
