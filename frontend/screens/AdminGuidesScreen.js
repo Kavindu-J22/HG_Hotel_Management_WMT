@@ -7,13 +7,12 @@ const AdminGuidesScreen = ({ navigation }) => {
     const [guides, setGuides] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchPendingGuides = async () => {
+    const fetchGuides = async () => {
         try {
             const res = await api.get('/guides');
-            const pendingGuides = res.data.data.filter(g => !g.isApproved);
-            setGuides(pendingGuides);
+            setGuides(res.data.data);
         } catch (error) {
-            console.error('Error fetching pending guides', error);
+            console.error('Error fetching guides', error);
         } finally {
             setLoading(false);
         }
@@ -21,7 +20,7 @@ const AdminGuidesScreen = ({ navigation }) => {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            fetchPendingGuides();
+            fetchGuides();
         });
         return unsubscribe;
     }, [navigation]);
@@ -58,19 +57,21 @@ const AdminGuidesScreen = ({ navigation }) => {
             <View style={styles.cardContent}>
                 <View style={styles.cardHeader}>
                     <Text style={styles.cardTitle}>{item.user?.name || 'Unknown'}</Text>
-                    <View style={[styles.badge, styles.badgePending]}>
-                        <Text style={styles.badgeText}>Pending</Text>
+                    <View style={[styles.badge, item.isApproved ? styles.badgeApproved : styles.badgePending]}>
+                        <Text style={[styles.badgeText, item.isApproved && {color: '#4caf50'}]}>{item.isApproved ? 'Approved' : 'Pending'}</Text>
                     </View>
                 </View>
                 <Text style={styles.cardSubtitle}>Experience: {item.experienceLevel}</Text>
                 <Text style={styles.languagesText}>Languages: {item.languages.join(', ')}</Text>
                 
-                <TouchableOpacity 
-                    style={styles.approveButton}
-                    onPress={() => approveGuide(item._id)}
-                >
-                    <Text style={styles.approveButtonText}>Approve Guide</Text>
-                </TouchableOpacity>
+                {!item.isApproved ? (
+                    <TouchableOpacity 
+                        style={styles.approveButton}
+                        onPress={() => approveGuide(item._id)}
+                    >
+                        <Text style={styles.approveButtonText}>Approve Guide</Text>
+                    </TouchableOpacity>
+                ) : null}
             </View>
         </View>
     );
@@ -78,8 +79,8 @@ const AdminGuidesScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <LinearGradient colors={['#9C27B0', '#E040FB']} style={styles.header}>
-                <Text style={styles.headerTitle}>Admin Dashboard</Text>
-                <Text style={styles.headerSubtitle}>Pending Tour Guide Approvals</Text>
+                <Text style={styles.headerTitle}>Guides Database</Text>
+                <Text style={styles.headerSubtitle}>Manage all tour guides</Text>
             </LinearGradient>
 
             {loading ? (
@@ -88,7 +89,7 @@ const AdminGuidesScreen = ({ navigation }) => {
                 </View>
             ) : guides.length === 0 ? (
                 <View style={styles.emptyContainer}>
-                    <Text style={styles.emptyText}>No pending Tour Guides to approve.</Text>
+                    <Text style={styles.emptyText}>No guides found.</Text>
                 </View>
             ) : (
                 <FlatList
@@ -119,6 +120,7 @@ const styles = StyleSheet.create({
     cardTitle: { fontSize: 18, fontWeight: 'bold', color: '#2D3142', flex: 1 },
     badge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8, marginLeft: 10 },
     badgePending: { backgroundColor: '#FFF3E0' },
+    badgeApproved: { backgroundColor: '#E8F5E9' },
     badgeText: { fontSize: 10, fontWeight: 'bold', color: '#424242' },
     cardSubtitle: { fontSize: 14, color: '#9E9EA7', marginBottom: 4 },
     languagesText: { fontSize: 13, color: '#FF6B6B', marginBottom: 12, fontWeight: 'bold' },

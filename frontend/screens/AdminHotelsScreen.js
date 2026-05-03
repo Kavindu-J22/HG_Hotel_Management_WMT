@@ -7,13 +7,12 @@ const AdminHotelsScreen = ({ navigation }) => {
     const [hotels, setHotels] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchPendingHotels = async () => {
+    const fetchHotels = async () => {
         try {
             const res = await api.get('/hotels');
-            const pendingHotels = res.data.data.filter(h => !h.isApproved);
-            setHotels(pendingHotels);
+            setHotels(res.data.data);
         } catch (error) {
-            console.error('Error fetching pending hotels', error);
+            console.error('Error fetching hotels', error);
         } finally {
             setLoading(false);
         }
@@ -21,7 +20,7 @@ const AdminHotelsScreen = ({ navigation }) => {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            fetchPendingHotels();
+            fetchHotels();
         });
         return unsubscribe;
     }, [navigation]);
@@ -39,7 +38,7 @@ const AdminHotelsScreen = ({ navigation }) => {
                         try {
                             await api.put(`/hotels/${id}/approve`);
                             Alert.alert("Success", "Hotel has been approved!");
-                            fetchPendingHotels();
+                            fetchHotels();
                         } catch (error) {
                             Alert.alert("Error", error.response?.data?.error || "Failed to approve hotel.");
                         }
@@ -58,19 +57,21 @@ const AdminHotelsScreen = ({ navigation }) => {
             <View style={styles.cardContent}>
                 <View style={styles.cardHeader}>
                     <Text style={styles.cardTitle}>{item.name}</Text>
-                    <View style={[styles.badge, styles.badgePending]}>
-                        <Text style={styles.badgeText}>Pending</Text>
+                    <View style={[styles.badge, item.isApproved ? styles.badgeApproved : styles.badgePending]}>
+                        <Text style={[styles.badgeText, item.isApproved && {color: '#4caf50'}]}>{item.isApproved ? 'Approved' : 'Pending'}</Text>
                     </View>
                 </View>
                 <Text style={styles.cardSubtitle}>📍 {item.location}</Text>
                 <Text style={styles.providerInfo}>Provider: {item.provider?.name || 'Unknown'}</Text>
                 
-                <TouchableOpacity 
-                    style={styles.approveButton}
-                    onPress={() => approveHotel(item._id)}
-                >
-                    <Text style={styles.approveButtonText}>Approve Hotel</Text>
-                </TouchableOpacity>
+                {!item.isApproved ? (
+                    <TouchableOpacity 
+                        style={styles.approveButton}
+                        onPress={() => approveHotel(item._id)}
+                    >
+                        <Text style={styles.approveButtonText}>Approve Hotel</Text>
+                    </TouchableOpacity>
+                ) : null}
             </View>
         </View>
     );
@@ -78,8 +79,8 @@ const AdminHotelsScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <LinearGradient colors={['#9C27B0', '#E040FB']} style={styles.header}>
-                <Text style={styles.headerTitle}>Admin Dashboard</Text>
-                <Text style={styles.headerSubtitle}>Pending Hotel Approvals</Text>
+                <Text style={styles.headerTitle}>Hotels Database</Text>
+                <Text style={styles.headerSubtitle}>Manage all properties</Text>
             </LinearGradient>
 
             {loading ? (
@@ -88,7 +89,7 @@ const AdminHotelsScreen = ({ navigation }) => {
                 </View>
             ) : hotels.length === 0 ? (
                 <View style={styles.emptyContainer}>
-                    <Text style={styles.emptyText}>No pending hotels to approve.</Text>
+                    <Text style={styles.emptyText}>No hotels found.</Text>
                 </View>
             ) : (
                 <FlatList
@@ -125,6 +126,7 @@ const styles = StyleSheet.create({
     cardTitle: { fontSize: 20, fontWeight: 'bold', color: '#2D3142', flex: 1 },
     badge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8, marginLeft: 10 },
     badgePending: { backgroundColor: '#FFF3E0' },
+    badgeApproved: { backgroundColor: '#E8F5E9' },
     badgeText: { fontSize: 10, fontWeight: 'bold', color: '#424242' },
     cardSubtitle: { fontSize: 14, color: '#9E9EA7', marginBottom: 4 },
     providerInfo: { fontSize: 13, color: '#FF6B6B', marginBottom: 16, fontWeight: 'bold' },

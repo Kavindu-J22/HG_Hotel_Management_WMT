@@ -26,6 +26,8 @@ import VehicleDetailsScreen from '../screens/VehicleDetailsScreen';
 import ProviderGuideScreen from '../screens/ProviderGuideScreen';
 import AddEditGuideScreen from '../screens/AddEditGuideScreen';
 import AdminGuidesScreen from '../screens/AdminGuidesScreen';
+import AdminBookingsScreen from '../screens/AdminBookingsScreen';
+import AdminReviewsScreen from '../screens/AdminReviewsScreen';
 import TourGuideDetailsScreen from '../screens/TourGuideDetailsScreen';
 import ProviderReviewsScreen from '../screens/ProviderReviewsScreen';
 import ProviderTourPlansScreen from '../screens/ProviderTourPlansScreen';
@@ -74,6 +76,8 @@ const AppNavigator = () => {
                         <Stack.Screen name="ProviderGuide" component={ProviderGuideScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="AddEditGuide" component={AddEditGuideScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="AdminGuides" component={AdminGuidesScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="AdminBookings" component={AdminBookingsScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="AdminReviews" component={AdminReviewsScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="ProviderReviews" component={ProviderReviewsScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="ProviderTourPlans" component={ProviderTourPlansScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="AddEditTourPlan" component={AddEditTourPlanScreen} options={{ headerShown: false }} />

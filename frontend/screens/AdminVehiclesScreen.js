@@ -7,13 +7,12 @@ const AdminVehiclesScreen = ({ navigation }) => {
     const [vehicles, setVehicles] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchPendingVehicles = async () => {
+    const fetchVehicles = async () => {
         try {
             const res = await api.get('/vehicles');
-            const pendingVehicles = res.data.data.filter(v => !v.isApproved);
-            setVehicles(pendingVehicles);
+            setVehicles(res.data.data);
         } catch (error) {
-            console.error('Error fetching pending vehicles', error);
+            console.error('Error fetching vehicles', error);
         } finally {
             setLoading(false);
         }
@@ -21,7 +20,7 @@ const AdminVehiclesScreen = ({ navigation }) => {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            fetchPendingVehicles();
+            fetchVehicles();
         });
         return unsubscribe;
     }, [navigation]);
@@ -39,7 +38,7 @@ const AdminVehiclesScreen = ({ navigation }) => {
                         try {
                             await api.put(`/vehicles/${id}/approve`);
                             Alert.alert("Success", "Vehicle has been approved!");
-                            fetchPendingVehicles();
+                            fetchVehicles();
                         } catch (error) {
                             Alert.alert("Error", error.response?.data?.error || "Failed to approve vehicle.");
                         }
@@ -58,19 +57,21 @@ const AdminVehiclesScreen = ({ navigation }) => {
             <View style={styles.cardContent}>
                 <View style={styles.cardHeader}>
                     <Text style={styles.cardTitle}>{item.brand} {item.model}</Text>
-                    <View style={[styles.badge, styles.badgePending]}>
-                        <Text style={styles.badgeText}>Pending</Text>
+                    <View style={[styles.badge, item.isApproved ? styles.badgeApproved : styles.badgePending]}>
+                        <Text style={[styles.badgeText, item.isApproved && {color: '#4caf50'}]}>{item.isApproved ? 'Approved' : 'Pending'}</Text>
                     </View>
                 </View>
                 <Text style={styles.cardSubtitle}>{item.type} • {item.fuel} • {item.seatingCapacity} Seats</Text>
                 <Text style={styles.providerInfo}>Provider: {item.provider?.name || 'Unknown'}</Text>
                 
-                <TouchableOpacity 
-                    style={styles.approveButton}
-                    onPress={() => approveVehicle(item._id)}
-                >
-                    <Text style={styles.approveButtonText}>Approve Vehicle</Text>
-                </TouchableOpacity>
+                {!item.isApproved ? (
+                    <TouchableOpacity 
+                        style={styles.approveButton}
+                        onPress={() => approveVehicle(item._id)}
+                    >
+                        <Text style={styles.approveButtonText}>Approve Vehicle</Text>
+                    </TouchableOpacity>
+                ) : null}
             </View>
         </View>
     );
@@ -78,8 +79,8 @@ const AdminVehiclesScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <LinearGradient colors={['#9C27B0', '#E040FB']} style={styles.header}>
-                <Text style={styles.headerTitle}>Admin Dashboard</Text>
-                <Text style={styles.headerSubtitle}>Pending Vehicle Approvals</Text>
+                <Text style={styles.headerTitle}>Vehicles Database</Text>
+                <Text style={styles.headerSubtitle}>Manage all rental vehicles</Text>
             </LinearGradient>
 
             {loading ? (
@@ -88,7 +89,7 @@ const AdminVehiclesScreen = ({ navigation }) => {
                 </View>
             ) : vehicles.length === 0 ? (
                 <View style={styles.emptyContainer}>
-                    <Text style={styles.emptyText}>No pending vehicles to approve.</Text>
+                    <Text style={styles.emptyText}>No vehicles found.</Text>
                 </View>
             ) : (
                 <FlatList
@@ -119,6 +120,7 @@ const styles = StyleSheet.create({
     cardTitle: { fontSize: 20, fontWeight: 'bold', color: '#2D3142', flex: 1 },
     badge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8, marginLeft: 10 },
     badgePending: { backgroundColor: '#FFF3E0' },
+    badgeApproved: { backgroundColor: '#E8F5E9' },
     badgeText: { fontSize: 10, fontWeight: 'bold', color: '#424242' },
     cardSubtitle: { fontSize: 14, color: '#9E9EA7', marginBottom: 4 },
     providerInfo: { fontSize: 13, color: '#4facfe', marginBottom: 16, fontWeight: 'bold' },
