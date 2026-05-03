@@ -15,9 +15,11 @@ const ProviderTourPlansScreen = ({ navigation }) => {
         const fetchGuideAndPlans = async () => {
             try {
                 // First get the guide profile for this provider
-                const guideRes = await api.get('/guides/me');
-                if (guideRes.data.data) {
-                    const currentGuideId = guideRes.data.data._id;
+                const guideRes = await api.get('/guides');
+                const myProfile = guideRes.data.data.find(g => g.user && g.user._id === user._id);
+
+                if (myProfile) {
+                    const currentGuideId = myProfile._id;
                     setGuideId(currentGuideId);
                     
                     // Fetch plans for this guide
