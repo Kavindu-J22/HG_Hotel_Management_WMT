@@ -19,7 +19,13 @@ const HomeScreen = ({ navigation }) => {
         { id: 2, title: 'View Incoming Bookings', subtitle: 'Confirm or Reject requests', colors: ['#4facfe', '#00f2fe'], route: 'Dashboard' },
     ];
 
-    const categories = user?.role === 'provider' ? providerCategories : touristCategories;
+    const adminCategories = [
+        { id: 1, title: 'Approve Hotels', subtitle: 'Review pending properties', colors: ['#9C27B0', '#E040FB'], route: 'AdminHotels' },
+    ];
+
+    let categories = touristCategories;
+    if (user?.role === 'provider') categories = providerCategories;
+    if (user?.role === 'admin') categories = adminCategories;
 
     return (
         <View style={styles.container}>
@@ -34,7 +40,9 @@ const HomeScreen = ({ navigation }) => {
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-                <Text style={styles.sectionTitle}>{user?.role === 'provider' ? 'Provider Tools' : 'Explore Categories'}</Text>
+                <Text style={styles.sectionTitle}>
+                    {user?.role === 'admin' ? 'Admin Tools' : user?.role === 'provider' ? 'Provider Tools' : 'Explore Categories'}
+                </Text>
                 
                 {categories.map((cat) => (
                     <TouchableOpacity 

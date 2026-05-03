@@ -45,7 +45,7 @@ const HotelDetailsScreen = ({ route, navigation }) => {
     );
 
     const renderRoom = ({ item }) => (
-        <View style={styles.roomCard}>
+        <View key={item._id} style={styles.roomCard}>
             {item.images && item.images.length > 0 && (
                 <Image source={{ uri: item.images[0] }} style={styles.roomImage} />
             )}
@@ -68,8 +68,21 @@ const HotelDetailsScreen = ({ route, navigation }) => {
                             <Text style={styles.perNight}> / night</Text>
                         </Text>
                     </View>
-                    <View style={styles.capacityBadge}>
-                        <Text style={styles.capacityText}>👤 {item.capacity}</Text>
+                    <View style={{ alignItems: 'flex-end' }}>
+                        <View style={styles.capacityBadge}>
+                            <Text style={styles.capacityText}>👤 {item.capacity}</Text>
+                        </View>
+                        <TouchableOpacity 
+                            style={styles.bookButton}
+                            onPress={() => navigation.navigate('Booking', {
+                                itemId: item._id,
+                                itemType: 'Room',
+                                itemTitle: `${hotel.name} - ${item.title}`,
+                                pricePerDay: item.discount > 0 ? (item.pricePerNight * (1 - item.discount / 100)).toFixed(2) : item.pricePerNight
+                            })}
+                        >
+                            <Text style={styles.bookButtonText}>Book Now</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -193,8 +206,9 @@ const styles = StyleSheet.create({
     originalPrice: { fontSize: 12, color: '#999', textDecorationLine: 'line-through' },
     roomPrice: { fontSize: 18, fontWeight: 'bold', color: '#FF6B6B' },
     perNight: { fontSize: 12, color: '#757575', fontWeight: 'normal' },
-    capacityBadge: { backgroundColor: '#E0E0E0', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
-    capacityText: { fontSize: 12, color: '#424242', fontWeight: 'bold' }
+    capacityText: { fontSize: 12, color: '#424242', fontWeight: 'bold' },
+    bookButton: { backgroundColor: '#FF6B6B', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8, marginTop: 8 },
+    bookButtonText: { color: '#FFF', fontSize: 12, fontWeight: 'bold' }
 });
 
 export default HotelDetailsScreen;

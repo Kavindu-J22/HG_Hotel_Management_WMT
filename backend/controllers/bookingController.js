@@ -111,6 +111,23 @@ exports.addBooking = async (req, res) => {
 
         const booking = await Booking.create(req.body);
 
+        // Fetch provider to get email
+        const User = require('../models/User'); // Import User model to fetch provider email
+        const provider = await User.findById(providerId);
+
+        // Send email to provider
+        if (provider && provider.email && process.env.EMAIL_USER) {
+            try {
+                await sendEmail({
+                    email: provider.email,
+                    subject: 'New Booking Request Received',
+                    message: `You have received a new booking request for ${itemType} (ID: ${itemId}).\nDates: ${startDate} to ${endDate}\nTotal Price: $${req.body.totalPrice}\n\nPlease check your Provider Dashboard to confirm or reject this booking.`
+                });
+            } catch (e) {
+                console.error('Failed to send email to provider', e);
+            }
+        }
+
         res.status(201).json({ success: true, data: booking });
     } catch (error) {
         res.status(400).json({ success: false, error: error.message });
@@ -162,6 +179,19 @@ exports.updateBooking = async (req, res) => {
                     }
                 }
             });
+        }
+
+        // If rejected, send rejection email
+        if (status === 'Rejected' && process.env.EMAIL_USER) {
+            try {
+                await sendEmail({
+                    email: booking.user.email,
+                    subject: 'Booking Request Rejected',
+                    message: `Unfortunately, your booking request (ID: ${booking._id}) has been rejected by the provider. Please explore other available options in our app.`
+                });
+            } catch (e) {
+                console.error('Failed to send rejection email to tourist', e);
+            }
         }
 
         res.status(200).json({ success: true, data: booking });
