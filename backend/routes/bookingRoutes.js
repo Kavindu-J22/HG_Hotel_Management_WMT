@@ -4,7 +4,8 @@ const {
     getBooking,
     addBooking,
     updateBooking,
-    deleteBooking
+    deleteBooking,
+    updateBookingDates
 } = require('../controllers/bookingController');
 const { protect, authorize } = require('../middlewares/authMiddleware');
 
@@ -22,5 +23,9 @@ router
     .get(getBooking)
     .put(authorize('provider', 'admin'), updateBooking)
     .delete(authorize('tourist', 'admin'), deleteBooking);
+
+router
+    .route('/:id/dates')
+    .put(authorize('tourist'), updateBookingDates);
 
 module.exports = router;

@@ -34,6 +34,8 @@ import ProviderTourPlansScreen from '../screens/ProviderTourPlansScreen';
 import AddEditTourPlanScreen from '../screens/AddEditTourPlanScreen';
 import TourPlanDetailsScreen from '../screens/TourPlanDetailsScreen';
 import WishlistScreen from '../screens/WishlistScreen';
+import TouristProfileScreen from '../screens/TouristProfileScreen';
+import EditBookingScreen from '../screens/EditBookingScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -63,7 +65,9 @@ const AppNavigator = () => {
                         <Stack.Screen name="TourGuideDetails" component={TourGuideDetailsScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="TourPlanDetails" component={TourPlanDetailsScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="Booking" component={BookingScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="EditBooking" component={EditBookingScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="Wishlist" component={WishlistScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="TouristProfile" component={TouristProfileScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="ProviderHotels" component={ProviderHotelsScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="AddEditHotel" component={AddEditHotelScreen} options={{ headerShown: false }} />

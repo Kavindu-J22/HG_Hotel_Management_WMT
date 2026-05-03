@@ -80,3 +80,50 @@ const sendTokenResponse = (user, statusCode, res) => {
         token
     });
 };
+
+// @desc    Update user details
+// @route   PUT /api/auth/updatedetails
+// @access  Private
+exports.updateDetails = async (req, res) => {
+    try {
+        const fieldsToUpdate = {
+            name: req.body.name,
+            email: req.body.email
+        };
+
+        const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+            new: true,
+            runValidators: true
+        });
+
+        res.status(200).json({
+            success: true,
+            data: user
+        });
+    } catch (error) {
+        res.status(400).json({ success: false, error: error.message });
+    }
+};
+
+// @desc    Delete user
+// @route   DELETE /api/auth/deleteme
+// @access  Private
+exports.deleteMe = async (req, res) => {
+    try {
+        // Also delete user's bookings to keep DB clean
+        const Booking = require('../models/Booking');
+        await Booking.deleteMany({ user: req.user.id });
+
+        const Review = require('../models/Review');
+        await Review.deleteMany({ user: req.user.id });
+
+        await User.findByIdAndDelete(req.user.id);
+
+        res.status(200).json({
+            success: true,
+            data: {}
+        });
+    } catch (error) {
+        res.status(400).json({ success: false, error: error.message });
+    }
+};

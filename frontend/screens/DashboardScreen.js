@@ -65,9 +65,20 @@ const DashboardScreen = ({ navigation }) => {
                 
                 {/* Tourist Actions */}
                 {isTourist && item.status === 'Pending' && (
-                    <TouchableOpacity style={styles.actionButton} onPress={() => cancelBooking(item._id)}>
-                        <Text style={styles.actionButtonText}>Cancel Booking</Text>
-                    </TouchableOpacity>
+                    <View style={styles.providerActions}>
+                        <TouchableOpacity 
+                            style={[styles.actionButton, { flex: 1, backgroundColor: '#FF9800', marginRight: 8 }]} 
+                            onPress={() => navigation.navigate('EditBooking', { booking: item })}
+                        >
+                            <Text style={styles.actionButtonText}>Edit Dates</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            style={[styles.actionButton, { flex: 1, backgroundColor: '#FF6B6B', marginLeft: 8 }]} 
+                            onPress={() => cancelBooking(item._id)}
+                        >
+                            <Text style={styles.actionButtonText}>Cancel Booking</Text>
+                        </TouchableOpacity>
+                    </View>
                 )}
 
                 {/* Provider Actions */}

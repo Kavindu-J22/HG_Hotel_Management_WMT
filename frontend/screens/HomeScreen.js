@@ -45,8 +45,7 @@ const HomeScreen = ({ navigation }) => {
                         <View style={[styles.iconCircle, { backgroundColor: '#E8EAF6' }]}>
                             <Text style={styles.actionIcon}>📅</Text>
                         </View>
-                        <Text style={styles.actionTitle}>My Bookings</Text>
-                        <Text style={styles.actionSubtitle}>View your history</Text>
+                        <Text style={styles.actionTitle}>Bookings</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('Wishlist')}>
@@ -54,7 +53,13 @@ const HomeScreen = ({ navigation }) => {
                             <Text style={styles.actionIcon}>❤️</Text>
                         </View>
                         <Text style={styles.actionTitle}>Wishlist</Text>
-                        <Text style={styles.actionSubtitle}>Saved favorites</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('TouristProfile')}>
+                        <View style={[styles.iconCircle, { backgroundColor: '#E3F2FD' }]}>
+                            <Text style={styles.actionIcon}>👤</Text>
+                        </View>
+                        <Text style={styles.actionTitle}>Profile</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -280,10 +285,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     actionCard: {
-        width: '48%',
+        width: '31%',
         backgroundColor: '#FFF',
         borderRadius: 20,
-        padding: 20,
+        padding: 15,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },

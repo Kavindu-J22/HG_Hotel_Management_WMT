@@ -232,3 +232,72 @@ exports.deleteBooking = async (req, res) => {
         res.status(400).json({ success: false, error: error.message });
     }
 };
+
+// @desc    Update booking dates
+// @route   PUT /api/bookings/:id/dates
+// @access  Private (Tourist)
+exports.updateBookingDates = async (req, res) => {
+    try {
+        let booking = await Booking.findById(req.params.id);
+
+        if (!booking) {
+            return res.status(404).json({ success: false, error: 'Booking not found' });
+        }
+
+        if (booking.user.toString() !== req.user.id) {
+            return res.status(401).json({ success: false, error: 'Not authorized to update this booking' });
+        }
+
+        if (booking.status !== 'Pending') {
+            return res.status(400).json({ success: false, error: 'Cannot edit a booking that is not Pending' });
+        }
+
+        const { startDate, endDate } = req.body;
+
+        // Recalculate total price
+        let item, pricePerDay;
+        const { itemType, itemId } = booking;
+        if (itemType === 'Room') {
+            item = await Room.findById(itemId);
+            pricePerDay = item.pricePerNight;
+        } else if (itemType === 'Vehicle') {
+            item = await Vehicle.findById(itemId);
+            pricePerDay = item.dailyRate;
+        } else if (itemType === 'TourPlan') {
+            item = await TourPlan.findById(itemId);
+            pricePerDay = item.price / item.durationDays;
+        } else if (itemType === 'TourGuide') {
+            item = await TourGuide.findById(itemId);
+            pricePerDay = item.dailyRate;
+        }
+
+        const days = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
+        if (days <= 0) return res.status(400).json({ success: false, error: 'Invalid dates' });
+        const totalPrice = (days * pricePerDay).toFixed(2);
+
+        // Check availability
+        const overlappingBookings = await Booking.find({
+            _id: { $ne: booking._id },
+            itemId: itemId,
+            status: { $in: ['Pending', 'Confirmed'] },
+            $or: [
+                { startDate: { $lte: endDate, $gte: startDate } },
+                { endDate: { $gte: startDate, $lte: endDate } },
+                { startDate: { $lte: startDate }, endDate: { $gte: endDate } }
+            ]
+        });
+
+        if (overlappingBookings.length > 0) {
+            return res.status(400).json({ success: false, error: 'Item is not available for these dates' });
+        }
+
+        booking.startDate = startDate;
+        booking.endDate = endDate;
+        booking.totalPrice = totalPrice;
+        await booking.save();
+
+        res.status(200).json({ success: true, data: booking });
+    } catch (error) {
+        res.status(400).json({ success: false, error: error.message });
+    }
+};
